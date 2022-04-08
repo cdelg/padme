@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode hideunconnected="yes"/>
+
+<defaultedge visible="no"/>
+
+<node>
+   <type name="AddedBlockEvaluation"/>
+   <type name="AddedSectionEvaluation"/>
+   <type name="AssessmentType"/>
+   <type name="CanceledInviteEvaluation"/>
+   <type name="ChangedOwnerEvaluation"/>
+   <type name="CreatedEvaluation"/>
+   <type name="DeletedEvaluation"/>
+   <type name="EditedAssessmentEvaluation"/>
+   <type name="EditedAssessmentTitleEvaluation"/>
+   <type name="EditedGuidelinesEvaluation"/>
+   <type name="EditedNameEvaluation"/>
+   <type name="EditedQuestionEvaluation"/>
+   <type name="EditedSectionNameEvaluation"/>
+   <type name="EvaluationSectionType"/>
+   <type name="Int"/>
+   <type name="InvitedEvaluation"/>
+   <type name="ParticipatoryType"/>
+   <type name="RemovedBlockEvaluation"/>
+   <type name="RemovedSectionEvaluation"/>
+   <type name="ReorderedBlockEvaluation"/>
+   <type name="ReorderedSectionEvaluation"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="open$4/Ord"/>
+   <type name="ordering/Ord"/>
+   <type name="seq/Int"/>
+   <type name="fwk/boolean/Boolean"/>
+   <type name="fwk/boolean/False"/>
+   <type name="fwk/boolean/True"/>
+   <type name="fwk/date/Date"/>
+   <type name="fwk/date/Date0"/>
+   <type name="fwk/date/Date1"/>
+   <type name="fwk/date/Date2"/>
+   <type name="fwk/text/Text"/>
+   <type name="fwk/text/Text0"/>
+   <type name="fwk/text/Text1"/>
+   <type name="fwk/text/Text2"/>
+   <type name="fwk/boolean/ordering/Ord"/>
+   <type name="fwk/date/ordering/Ord"/>
+   <type name="fwk/text/ordering/Ord"/>
+   <set name="$evaluatePrinciple_e" type="Evaluation"/>
+</node>
+
+<node color="Gray">
+   <type name="Participant"/>
+   <type name="QuestionBlock"/>
+</node>
+
+<node color="Green">
+   <type name="AssessmentBlock"/>
+   <type name="Evaluation"/>
+   <type name="EvaluationSection"/>
+</node>
+
+<node shape="Ellipse" color="Black">
+   <type name="EvaluationEvent"/>
+</node>
+
+<edge attribute="no">
+   <relation name="$updateByAdding_val"> <type name="univ"/> <type name="univ"/> </relation>
+</edge>
+
+<edge attribute="yes">
+   <relation name="guidelines"> <type name="EvaluationSection"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="name"> <type name="Evaluation"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="name"> <type name="EvaluationSection"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="question"> <type name="QuestionBlock"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="title"> <type name="AssessmentBlock"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="type"> <type name="EvaluationSection"/> <type name="EvaluationSectionType"/> </relation>
+</edge>
+
+<edge visible="no" attribute="no">
+   <relation name="evaluation"> <type name="EvaluationSection"/> <type name="Evaluation"/> </relation>
+   <relation name="section"> <type name="AssessmentBlock"/> <type name="EvaluationSection"/> </relation>
+   <relation name="section"> <type name="QuestionBlock"/> <type name="EvaluationSection"/> </relation>
+</edge>
+
+<edge visible="no" attribute="yes">
+   <relation name="assessment"> <type name="AssessmentBlock"/> <type name="fwk/text/Text"/> </relation>
+</edge>
+
+<edge visible="yes">
+   <relation name="blocks"> <type name="EvaluationSection"/> <type name="AssessmentBlock"/> </relation>
+   <relation name="blocks"> <type name="EvaluationSection"/> <type name="QuestionBlock"/> </relation>
+   <relation name="sections"> <type name="Evaluation"/> <type name="EvaluationSection"/> </relation>
+</edge>
+
+<edge visible="yes" attribute="no">
+   <relation name="functionalOwner"> <type name="Evaluation"/> <type name="Participant"/> </relation>
+   <relation name="invited"> <type name="Evaluation"/> <type name="Participant"/> </relation>
+</edge>
+
+<edge visible="yes" attribute="no" constraint="no">
+   <relation name="$evaluationEvents"> <type name="univ"/> <type name="univ"/> </relation>
+</edge>
+
+</view>
+
+</alloy>

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode/>
+
+<defaultedge visible="no"/>
+
+<node>
+   <type name="AcceptedLead"/>
+   <type name="AcceptedLeadStatus"/>
+   <type name="ActiveLeadStatus"/>
+   <type name="AddedBlockingMark"/>
+   <type name="AddedLeadItems"/>
+   <type name="AddedStageItems"/>
+   <type name="CreatedLead"/>
+   <type name="DeclinedLead"/>
+   <type name="DeclinedLeadStatus"/>
+   <type name="DeletedLead"/>
+   <type name="Int"/>
+   <type name="LeadStage"/>
+   <type name="LeadStage1"/>
+   <type name="LeadStage2"/>
+   <type name="LeadStage3"/>
+   <type name="LeadStatus"/>
+   <type name="NextStage"/>
+   <type name="PreviousStage"/>
+   <type name="RemovedBlockingMark"/>
+   <type name="RemovedLeadItems"/>
+   <type name="RemovedStageItems"/>
+   <type name="ReopenedLead"/>
+   <type name="String"/>
+   <type name="open$5/Ord"/>
+   <type name="open$6/Ord"/>
+   <type name="ordering/Ord"/>
+   <type name="seq/Int"/>
+   <type name="fwk/boolean/Boolean"/>
+   <type name="fwk/boolean/False"/>
+   <type name="fwk/boolean/True"/>
+   <type name="fwk/date/Date"/>
+   <type name="fwk/date/Date0"/>
+   <type name="fwk/date/Date1"/>
+   <type name="fwk/date/Date2"/>
+   <type name="fwk/text/Text"/>
+   <type name="fwk/text/Text0"/>
+   <type name="fwk/text/Text1"/>
+   <type name="fwk/text/Text2"/>
+   <type name="fwk/boolean/ordering/Ord"/>
+   <type name="fwk/date/ordering/Ord"/>
+   <type name="fwk/text/ordering/Ord"/>
+   <set name="$acceptLeadPrinciple_led" type="Lead"/>
+</node>
+
+<node color="Gray">
+   <type name="Asset"/>
+   <type name="Goal"/>
+   <type name="ReviewItem"/>
+</node>
+
+<node color="Green">
+   <type name="Lead"/>
+</node>
+
+<node hideunconnected="yes">
+   <type name="univ"/>
+</node>
+
+<node shape="Ellipse" color="Black">
+   <type name="LeadEvent"/>
+</node>
+
+<edge attribute="yes">
+   <relation name="stage"> <type name="Lead"/> <type name="LeadStage"/> </relation>
+   <relation name="status"> <type name="Lead"/> <type name="LeadStatus"/> </relation>
+</edge>
+
+<edge visible="yes">
+   <relation name="$leadEvents"> <type name="univ"/> <type name="univ"/> </relation>
+   <relation name="asset"> <type name="Lead"/> <type name="Asset"/> </relation>
+   <relation name="blockers"> <type name="Lead"/> <type name="ReviewItem"/> </relation>
+   <relation name="goal"> <type name="Lead"/> <type name="Goal"/> </relation>
+   <relation name="leadItems"> <type name="Lead"/> <type name="ReviewItem"/> </relation>
+   <relation name="stageItems"> <type name="Lead"/> <type name="LeadStage"/> <type name="ReviewItem"/> </relation>
+</edge>
+
+</view>
+
+</alloy>

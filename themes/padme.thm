@@ -1,0 +1,229 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode hideunconnected="yes"/>
+
+<defaultedge visible="no"/>
+
+<node>
+   <type name="Int"/>
+   <type name="univ"/>
+   <type name="assessmentCmt/CreatedComment"/>
+   <type name="assessmentCmt/EditedContentComment"/>
+   <type name="assessmentCmtReply/CreatedComment"/>
+   <type name="assessmentCmtReply/EditedContentComment"/>
+   <type name="evaluation/AddedBlockEvaluation"/>
+   <type name="evaluation/AddedSectionEvaluation"/>
+   <type name="evaluation/AssessmentType"/>
+   <type name="evaluation/CanceledInviteEvaluation"/>
+   <type name="evaluation/ChangedOwnerEvaluation"/>
+   <type name="evaluation/CreatedEvaluation"/>
+   <type name="evaluation/DeletedEvaluation"/>
+   <type name="evaluation/EditedAssessmentEvaluation"/>
+   <type name="evaluation/EditedAssessmentTitleEvaluation"/>
+   <type name="evaluation/EditedGuidelinesEvaluation"/>
+   <type name="evaluation/EditedNameEvaluation"/>
+   <type name="evaluation/EditedQuestionEvaluation"/>
+   <type name="evaluation/EditedSectionNameEvaluation"/>
+   <type name="evaluation/InvitedEvaluation"/>
+   <type name="evaluation/ParticipatoryType"/>
+   <type name="evaluation/RemovedBlockEvaluation"/>
+   <type name="evaluation/RemovedSectionEvaluation"/>
+   <type name="evaluation/ReorderedBlockEvaluation"/>
+   <type name="evaluation/ReorderedSectionEvaluation"/>
+   <type name="lead/AcceptedLead"/>
+   <type name="lead/AcceptedLeadStatus"/>
+   <type name="lead/ActiveLeadStatus"/>
+   <type name="lead/AddedBlockingMark"/>
+   <type name="lead/AddedItems"/>
+   <type name="lead/CreatedLead"/>
+   <type name="lead/DeclinedLead"/>
+   <type name="lead/DeclinedLeadStatus"/>
+   <type name="lead/DeletedLead"/>
+   <type name="lead/Lead"/>
+   <type name="lead/LeadStage"/>
+   <type name="lead/LeadStage1"/>
+   <type name="lead/LeadStage2"/>
+   <type name="lead/LeadStage3"/>
+   <type name="lead/LeadStatus"/>
+   <type name="lead/NextStage"/>
+   <type name="lead/PreviousStage"/>
+   <type name="lead/RemovedBlockingMark"/>
+   <type name="lead/RemovedItems"/>
+   <type name="lead/ReopenedLead"/>
+   <type name="questionCmt/CreatedComment"/>
+   <type name="questionCmt/EditedContentComment"/>
+   <type name="questionCmtReply/CreatedComment"/>
+   <type name="questionCmtReply/EditedContentComment"/>
+   <type name="seq/Int"/>
+   <type name="task/ActiveTaskStatus"/>
+   <type name="task/AssignedTask"/>
+   <type name="task/ChangedDueDateTask"/>
+   <type name="task/CompletedTask"/>
+   <type name="task/CompletedTaskStatus"/>
+   <type name="task/CreatedTask"/>
+   <type name="task/DeletedTask"/>
+   <type name="task/EditedDescriptionTask"/>
+   <type name="task/EditedLabelTask"/>
+   <type name="task/ReopenedTask"/>
+   <type name="assessmentCmt/ordering/Ord"/>
+   <type name="assessmentCmtReply/ordering/Ord"/>
+   <type name="evaluation/open$4/Ord"/>
+   <type name="evaluation/ordering/Ord"/>
+   <type name="fwk/boolean/Boolean"/>
+   <type name="fwk/boolean/False"/>
+   <type name="fwk/boolean/True"/>
+   <type name="fwk/date/Date"/>
+   <type name="fwk/date/Date0"/>
+   <type name="fwk/date/Date1"/>
+   <type name="fwk/date/Date2"/>
+   <type name="fwk/text/Text"/>
+   <type name="fwk/text/Text0"/>
+   <type name="fwk/text/Text1"/>
+   <type name="fwk/text/Text2"/>
+   <type name="lead/open$5/Ord"/>
+   <type name="lead/open$6/Ord"/>
+   <type name="lead/ordering/Ord"/>
+   <type name="questionCmt/ordering/Ord"/>
+   <type name="questionCmtReply/ordering/Ord"/>
+   <type name="task/open$4/Ord"/>
+   <type name="task/ordering/Ord"/>
+   <type name="fwk/boolean/ordering/Ord"/>
+   <type name="fwk/date/ordering/Ord"/>
+   <type name="fwk/text/ordering/Ord"/>
+   <set name="$simulation_evl" type="evaluation/Evaluation"/>
+   <set name="$simulation_led" type="lead/Lead"/>
+</node>
+
+<node color="Red">
+   <type name="assessmentCmt/Comment"/>
+   <type name="assessmentCmtReply/Comment"/>
+   <type name="questionCmt/Comment"/>
+   <type name="questionCmtReply/Comment"/>
+</node>
+
+<node hideunconnected="no" color="Gray">
+   <type name="Asset"/>
+   <type name="Brief"/>
+</node>
+
+<node hideunconnected="no" style="inherit" color="Gray">
+   <type name="User"/>
+</node>
+
+<node hideunconnected="yes">
+   <type name="String"/>
+</node>
+
+<node hideunconnected="yes" color="Blue" label="TaskStatus">
+   <type name="task/TaskStatus"/>
+</node>
+
+<node hideunconnected="yes" color="Green" label="EvaluationSectionType">
+   <type name="evaluation/EvaluationSectionType"/>
+</node>
+
+<node hideunconnected="yes" shape="Ellipse" color="Black" label="EvaluationEvent">
+   <type name="evaluation/EvaluationEvent"/>
+</node>
+
+<node hideunconnected="yes" shape="Ellipse" color="Black" label="TaskEvent">
+   <type name="task/TaskEvent"/>
+</node>
+
+<node shape="Ellipse" color="Black">
+   <type name="assessmentCmt/CommentEvent"/>
+   <type name="assessmentCmtReply/CommentEvent"/>
+   <type name="lead/LeadEvent"/>
+   <type name="questionCmt/CommentEvent"/>
+   <type name="questionCmtReply/CommentEvent"/>
+</node>
+
+<node style="inherit" color="Blue" label="Task">
+   <type name="task/Task"/>
+</node>
+
+<node style="inherit" color="Green" label="AssessmentBlock">
+   <type name="evaluation/AssessmentBlock"/>
+</node>
+
+<node style="inherit" color="Green" label="Evaluation">
+   <type name="evaluation/Evaluation"/>
+</node>
+
+<node style="inherit" color="Green" label="EvaluationSection">
+   <type name="evaluation/EvaluationSection"/>
+</node>
+
+<node style="inherit" color="Green" label="QuestionBlock">
+   <type name="evaluation/QuestionBlock"/>
+</node>
+
+<edge attribute="yes">
+   <relation name="assessment"> <type name="evaluation/AssessmentBlock"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="blockers"> <type name="lead/Lead"/> <type name="univ"/> </relation>
+   <relation name="completionDate"> <type name="task/Task"/> <type name="fwk/date/Date"/> </relation>
+   <relation name="content"> <type name="assessmentCmt/Comment"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="content"> <type name="assessmentCmtReply/Comment"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="content"> <type name="questionCmt/Comment"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="content"> <type name="questionCmtReply/Comment"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="description"> <type name="task/Task"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="dueDate"> <type name="task/Task"/> <type name="fwk/date/Date"/> </relation>
+   <relation name="guidelines"> <type name="evaluation/EvaluationSection"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="label"> <type name="task/Task"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="modified"> <type name="assessmentCmt/Comment"/> <type name="fwk/boolean/Boolean"/> </relation>
+   <relation name="modified"> <type name="assessmentCmtReply/Comment"/> <type name="fwk/boolean/Boolean"/> </relation>
+   <relation name="modified"> <type name="questionCmt/Comment"/> <type name="fwk/boolean/Boolean"/> </relation>
+   <relation name="modified"> <type name="questionCmtReply/Comment"/> <type name="fwk/boolean/Boolean"/> </relation>
+   <relation name="name"> <type name="evaluation/Evaluation"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="name"> <type name="evaluation/EvaluationSection"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="question"> <type name="evaluation/QuestionBlock"/> <type name="fwk/text/Text"/> </relation>
+   <relation name="stage"> <type name="lead/Lead"/> <type name="lead/LeadStage"/> </relation>
+   <relation name="status"> <type name="lead/Lead"/> <type name="lead/LeadStatus"/> </relation>
+   <relation name="title"> <type name="evaluation/AssessmentBlock"/> <type name="fwk/text/Text"/> </relation>
+</edge>
+
+<edge style="inherit" attribute="no">
+   <relation name="evaluation"> <type name="evaluation/EvaluationSection"/> <type name="evaluation/Evaluation"/> </relation>
+   <relation name="section"> <type name="evaluation/AssessmentBlock"/> <type name="evaluation/EvaluationSection"/> </relation>
+   <relation name="section"> <type name="evaluation/QuestionBlock"/> <type name="evaluation/EvaluationSection"/> </relation>
+</edge>
+
+<edge style="inherit" visible="no" attribute="yes">
+   <relation name="status"> <type name="task/Task"/> <type name="task/TaskStatus"/> </relation>
+   <relation name="type"> <type name="evaluation/EvaluationSection"/> <type name="evaluation/EvaluationSectionType"/> </relation>
+</edge>
+
+<edge style="inherit" visible="yes">
+   <relation name="taskObject"> <type name="task/Task"/> <type name="univ"/> </relation>
+</edge>
+
+<edge style="inherit" visible="yes" attribute="no">
+   <relation name="assignee"> <type name="task/Task"/> <type name="User"/> </relation>
+   <relation name="functionalOwner"> <type name="evaluation/Evaluation"/> <type name="User"/> </relation>
+   <relation name="invited"> <type name="evaluation/Evaluation"/> <type name="User"/> </relation>
+</edge>
+
+<edge visible="yes">
+   <relation name="asset"> <type name="lead/Lead"/> <type name="Asset"/> </relation>
+   <relation name="blocks"> <type name="evaluation/EvaluationSection"/> <type name="evaluation/AssessmentBlock"/> </relation>
+   <relation name="blocks"> <type name="evaluation/EvaluationSection"/> <type name="evaluation/QuestionBlock"/> </relation>
+   <relation name="goal"> <type name="lead/Lead"/> <type name="Brief"/> </relation>
+   <relation name="leadItems"> <type name="lead/Lead"/> <type name="univ"/> </relation>
+   <relation name="sections"> <type name="evaluation/Evaluation"/> <type name="evaluation/EvaluationSection"/> </relation>
+   <relation name="stageItems"> <type name="lead/Lead"/> <type name="lead/LeadStage"/> <type name="univ"/> </relation>
+</edge>
+
+<edge visible="yes" attribute="no">
+   <relation name="$events"> <type name="univ"/> <type name="univ"/> </relation>
+   <relation name="target"> <type name="assessmentCmt/Comment"/> <type name="evaluation/AssessmentBlock"/> </relation>
+   <relation name="target"> <type name="assessmentCmtReply/Comment"/> <type name="assessmentCmt/Comment"/> </relation>
+   <relation name="target"> <type name="questionCmt/Comment"/> <type name="evaluation/QuestionBlock"/> </relation>
+   <relation name="target"> <type name="questionCmtReply/Comment"/> <type name="questionCmt/Comment"/> </relation>
+</edge>
+
+</view>
+
+</alloy>

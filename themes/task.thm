@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode hideunconnected="yes"/>
+
+<defaultedge visible="no" attribute="yes"/>
+
+<node>
+   <type name="ActiveTaskStatus"/>
+   <type name="AssignedTask"/>
+   <type name="ChangedDueDateTask"/>
+   <type name="CompletedTask"/>
+   <type name="CompletedTaskStatus"/>
+   <type name="CreatedTask"/>
+   <type name="DeletedTask"/>
+   <type name="EditedDescriptionTask"/>
+   <type name="EditedLabelTask"/>
+   <type name="Int"/>
+   <type name="ReopenedTask"/>
+   <type name="String"/>
+   <type name="TaskStatus"/>
+   <type name="univ"/>
+   <type name="open$4/Ord"/>
+   <type name="ordering/Ord"/>
+   <type name="seq/Int"/>
+   <type name="fwk/boolean/Boolean"/>
+   <type name="fwk/boolean/False"/>
+   <type name="fwk/boolean/True"/>
+   <type name="fwk/date/Date"/>
+   <type name="fwk/date/Date0"/>
+   <type name="fwk/date/Date1"/>
+   <type name="fwk/date/Date2"/>
+   <type name="fwk/text/Text"/>
+   <type name="fwk/text/Text0"/>
+   <type name="fwk/text/Text1"/>
+   <type name="fwk/text/Text2"/>
+   <type name="fwk/boolean/ordering/Ord"/>
+   <type name="fwk/date/ordering/Ord"/>
+   <type name="fwk/text/ordering/Ord"/>
+   <set name="$completeTaskPrinciple_tsk" type="Task"/>
+</node>
+
+<node color="Blue">
+   <type name="Task"/>
+</node>
+
+<node color="Gray">
+   <type name="Assignee"/>
+</node>
+
+<node hideunconnected="no" color="Gray">
+   <type name="LinkedObject"/>
+</node>
+
+<node shape="Ellipse" color="Black">
+   <type name="TaskEvent"/>
+</node>
+
+<edge style="inherit" visible="yes" attribute="no">
+   <relation name="linkedObject"> <type name="Task"/> <type name="LinkedObject"/> </relation>
+</edge>
+
+<edge visible="yes" attribute="no">
+   <relation name="$taskEvents"> <type name="univ"/> <type name="univ"/> </relation>
+   <relation name="assignee"> <type name="Task"/> <type name="Assignee"/> </relation>
+</edge>
+
+</view>
+
+</alloy>

@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<defaultnode hideunconnected="yes"/>
+
+<defaultedge visible="no" attribute="yes"/>
+
+<node>
+   <type name="CreatedComment"/>
+   <type name="EditedContentComment"/>
+   <type name="Int"/>
+   <type name="String"/>
+   <type name="univ"/>
+   <type name="ordering/Ord"/>
+   <type name="seq/Int"/>
+   <type name="fwk/boolean/Boolean"/>
+   <type name="fwk/boolean/False"/>
+   <type name="fwk/boolean/True"/>
+   <type name="fwk/date/Date"/>
+   <type name="fwk/date/Date0"/>
+   <type name="fwk/date/Date1"/>
+   <type name="fwk/date/Date2"/>
+   <type name="fwk/text/Text"/>
+   <type name="fwk/text/Text0"/>
+   <type name="fwk/text/Text1"/>
+   <type name="fwk/text/Text2"/>
+   <type name="fwk/boolean/ordering/Ord"/>
+   <type name="fwk/date/ordering/Ord"/>
+   <type name="fwk/text/ordering/Ord"/>
+</node>
+
+<node color="Gray">
+   <type name="Target"/>
+</node>
+
+<node color="Red">
+   <type name="Comment"/>
+</node>
+
+<node shape="Ellipse" color="Black">
+   <type name="CommentEvent"/>
+</node>
+
+<edge visible="yes" attribute="no">
+   <relation name="$commentEvents"> <type name="univ"/> <type name="univ"/> </relation>
+   <relation name="target"> <type name="Comment"/> <type name="Target"/> </relation>
+</edge>
+
+</view>
+
+</alloy>
