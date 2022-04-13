@@ -8,8 +8,8 @@
 <defaultedge visible="no" attribute="yes"/>
 
 <node>
-   <type name="CreatedComment"/>
-   <type name="EditedContentComment"/>
+   <type name="CreateComment"/>
+   <type name="EditContentComment"/>
    <type name="Int"/>
    <type name="String"/>
    <type name="univ"/>
@@ -29,23 +29,41 @@
    <type name="fwk/boolean/ordering/Ord"/>
    <type name="fwk/date/ordering/Ord"/>
    <type name="fwk/text/ordering/Ord"/>
+   <set name="$commentPrinciple_c" type="Comment"/>
 </node>
 
 <node color="Gray">
-   <type name="Target"/>
+   <type name="Commentable1"/>
+   <type name="Commentable2"/>
+   <type name="Commentable3"/>
 </node>
 
-<node color="Red">
+<node hideunconnected="no" color="Red">
    <type name="Comment"/>
 </node>
 
-<node shape="Ellipse" color="Black">
+<node hideunconnected="no" showlabel="no">
+   <set name="$vizCommentEvents" type="CommentEvent"/>
+</node>
+
+<node shape="Parallelogram" color="Black">
    <type name="CommentEvent"/>
 </node>
 
+<node showlabel="no">
+   <set name="$createComment" type="Comment"/>
+   <set name="$editContent" type="Comment"/>
+</node>
+
+<edge label="args">
+   <relation name="$vizCommentEventArgs"> <type name="CommentEvent"/> <type name="Comment"/> </relation>
+</edge>
+
 <edge visible="yes" attribute="no">
-   <relation name="$commentEvents"> <type name="univ"/> <type name="univ"/> </relation>
-   <relation name="target"> <type name="Comment"/> <type name="Target"/> </relation>
+   <relation name="target"> <type name="Comment"/> <type name="Comment"/> </relation>
+   <relation name="target"> <type name="Comment"/> <type name="Commentable1"/> </relation>
+   <relation name="target"> <type name="Comment"/> <type name="Commentable2"/> </relation>
+   <relation name="target"> <type name="Comment"/> <type name="Commentable3"/> </relation>
 </edge>
 
 </view>

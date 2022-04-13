@@ -7,7 +7,7 @@
 A task allows the assignee to follow up on a job that needs to be done about an object.
 
 ```alloy
-module task[Assignee, TaskObject]
+module task[Assignee, TaskObject1, TaskObject2, TaskObject3]
 
 open fwk/fwk
 ```
@@ -15,6 +15,8 @@ open fwk/fwk
 ## State
 
 ```alloy
+private let TaskObject = TaskObject1 + TaskObject2 + TaskObject3
+
 enum TaskStatus {ActiveTaskStatus, CompletedTaskStatus}
 
 var sig Task {
@@ -31,48 +33,72 @@ var sig Task {
 ## Actions
 
 ```alloy
-pred editLabel[obj: Task] {
-	obj.update[Task<:label]
+pred Task.createTask[tso: TaskObject] {
+	this.create
+
+	this.taskObject = tso
 }
 
-pred editLabel[obj: Task, val: Text] {
-	obj.update[Task<:label, val]
+fun createTask: set Task {
+	{t: Task | t.create}
 }
 
-pred editDescription[obj: Task] {
-	obj.update[Task<:description]
+fun deleteTask: set Task {
+	{t: Task | t.delete}
 }
 
-pred editDescription[obj: Task, val: Text] {
-	obj.update[Task<:description, val]
+pred Task.editLabel[val: Text] {
+	this.update[Task<:label, val]
 }
 
-pred changeDueDate[obj: Task] {
-	obj.update[Task<:dueDate]
+fun editLabel: set Task {
+	{t: Task, txt: Text | t.editLabel[txt]}.Text
 }
 
-pred changeDueDate[obj: Task, val: Date] {
-	obj.update[Task<:dueDate, val]
+pred Task.editDescription[val: Text] {
+	this.update[Task<:description, val]
 }
 
-pred assign[obj: Task] {
-	obj.update[Task<:assignee]
+fun editDescription: set Task {
+	{t: Task, txt: Text | t.editDescription[txt]}.Text + {t: Task | t.editDescription[none]}
 }
 
-pred assign[obj: Task, val: Assignee] {
-	obj.update[Task<:assignee, val]
+pred Task.changeDueDate[val: Date] {
+	this.update[Task<:dueDate, val]
 }
 
-pred complete[obj: Task] {
-	obj.update[Task<:completionDate] and no obj.completionDate and some obj.completionDate'
+fun changeDueDate: set Task {
+	{t: Task, dte: Date | t.changeDueDate[dte]}.Date + {t: Task | t.changeDueDate[none]}
 }
 
-pred complete[obj: Task, val: some Date] {
-	obj.update[Task<:completionDate, val] and no obj.completionDate
+pred Task.assign[val: Assignee] {
+	this.update[Task<:assignee, val]
 }
 
-pred reopen[obj: Task] {
-	obj.update[Task<:completionDate] and some obj.completionDate and no obj.completionDate'
+fun assign: set Task {
+	{t: Task, ase: Assignee | t.assign[ase]}.Assignee + {t: Task | t.assign[none]}
+}
+
+pred Task.complete[val: Date] {
+	no this.completionDate
+	
+	this.update[Task<:completionDate, val]
+	some this.completionDate'
+}
+
+fun complete: set Task {
+	{t: Task, dte: Date | t.complete[dte]}.Date
+}
+
+pred Task.reopen {
+	some this.completionDate
+
+	this.update[Task<:completionDate, none]
+	no this.completionDate'
+}
+
+fun reopen: set Task {
+	{t: Task | t.reopen}
 }
 ```
 
@@ -108,25 +134,29 @@ fact{
 
 ```alloy
 enum TaskEvent{
-	CreatedTask, 
-	DeletedTask, 
-	EditedLabelTask, 
-	EditedDescriptionTask, 
-	ChangedDueDateTask, 
-	AssignedTask, 
-	CompletedTask, 
-	ReopenedTask
+	CreateTask, 
+	DeleteTask, 
+	EditLabelTask, 
+	EditDescriptionTask, 
+	ChangeDueDateTask, 
+	AssignTask, 
+	CompleteTask, 
+	ReopenTask
 }
 
-fun taskEvents: univ -> univ {
-	CreatedTask -> {t: Task | t.created}
-	+ DeletedTask -> {t: Task |  t.delete}
-	+ EditedLabelTask -> {t: Task | before t.editLabel}
-	+ EditedDescriptionTask -> {t: Task | before t.editDescription}
-	+ ChangedDueDateTask -> {t: Task | before t.changeDueDate}
-	+ AssignedTask -> {t: Task | before t.assign}
-	+ CompletedTask -> {t: Task | before t.complete}
-	+ ReopenedTask -> {t: Task |before t.reopen}
+fun vizTaskEvents: set TaskEvent {
+	vizTaskEventArgs.Task
+}
+
+fun vizTaskEventArgs: TaskEvent -> Task {
+	CreateTask -> createTask +
+	DeleteTask -> deleteTask +
+	EditLabelTask -> editLabel +
+	EditDescriptionTask -> editDescription +
+	ChangeDueDateTask -> changeDueDate +
+	AssignTask -> assign +
+	CompleteTask -> complete +
+	ReopenTask -> reopen
 }
 ```
 
@@ -134,7 +164,7 @@ fun taskEvents: univ -> univ {
 
 ```alloy
 pred completeTaskPrinciple {
-	eventually some tsk: Task | tsk.complete
+	eventually some complete
 }
 
 run completeTaskPrinciple

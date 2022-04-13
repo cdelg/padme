@@ -8,21 +8,35 @@ module fwk/ordered_value[Value0, Value1, Value2]
 private let Value = (Value0 + Value1 + Value2)
 
 pred isBefore[a, b: Value] {
-	(a = Value0 and b = Value1)
-	or (a = Value0 and b = Value2)
-	or (a = Value1 and b = Value2)
+	some a 
+	some b 
+	a in beforeOf[b]
 }
 
 pred isAfter[a, b: Value] {
-	a != b and not isBefore[a, b] 
+	some a 
+	some b
+	a in afterOf[b]
 }
 
-fun beforeOf[a: Value]: set Value {
-	{b: Value | b.isBefore[a]}
+fun beforeOf[v: Value]: set Value {
+	v.^{a, b: Value | b = justBeforeOf[a]}
 }
 
-fun afterOf[a: Value]: set Value {
-	{b: Value | b.isAfter[a]}
+fun justBeforeOf[a: Value]: lone Value {
+	a = Value2 implies Value1
+	else a = Value1 implies Value0
+	else none
+}
+
+fun afterOf[v: Value]: set Value {
+	v.^{a, b: Value | b = justAfterOf[a]}
+}
+
+fun justAfterOf[a: Value]: lone Value {
+	a = Value0 implies Value1
+	else a = Value1 implies Value2
+	else none
 }
 
 run {} for 1

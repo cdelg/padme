@@ -9,16 +9,16 @@
 
 <node>
    <type name="ActiveTaskStatus"/>
-   <type name="AssignedTask"/>
-   <type name="ChangedDueDateTask"/>
-   <type name="CompletedTask"/>
+   <type name="AssignTask"/>
+   <type name="ChangeDueDateTask"/>
    <type name="CompletedTaskStatus"/>
-   <type name="CreatedTask"/>
-   <type name="DeletedTask"/>
-   <type name="EditedDescriptionTask"/>
-   <type name="EditedLabelTask"/>
+   <type name="CompleteTask"/>
+   <type name="CreateTask"/>
+   <type name="DeleteTask"/>
+   <type name="EditDescriptionTask"/>
+   <type name="EditLabelTask"/>
    <type name="Int"/>
-   <type name="ReopenedTask"/>
+   <type name="ReopenTask"/>
    <type name="String"/>
    <type name="TaskStatus"/>
    <type name="univ"/>
@@ -28,7 +28,6 @@
    <type name="fwk/boolean/Boolean"/>
    <type name="fwk/boolean/False"/>
    <type name="fwk/boolean/True"/>
-   <type name="fwk/date/Date"/>
    <type name="fwk/date/Date0"/>
    <type name="fwk/date/Date1"/>
    <type name="fwk/date/Date2"/>
@@ -39,7 +38,6 @@
    <type name="fwk/boolean/ordering/Ord"/>
    <type name="fwk/date/ordering/Ord"/>
    <type name="fwk/text/ordering/Ord"/>
-   <set name="$completeTaskPrinciple_tsk" type="Task"/>
 </node>
 
 <node color="Blue">
@@ -48,23 +46,43 @@
 
 <node color="Gray">
    <type name="Assignee"/>
+   <type name="TaskObject1"/>
+   <type name="TaskObject2"/>
+   <type name="TaskObject3"/>
 </node>
 
-<node hideunconnected="no" color="Gray">
-   <type name="LinkedObject"/>
+<node hideunconnected="no" showlabel="no">
+   <set name="$vizTaskEvents" type="TaskEvent"/>
 </node>
 
-<node shape="Ellipse" color="Black">
+<node label="Date">
+   <type name="fwk/date/Date"/>
+</node>
+
+<node shape="Parallelogram" color="Black">
    <type name="TaskEvent"/>
 </node>
 
-<edge style="inherit" visible="yes" attribute="no">
-   <relation name="linkedObject"> <type name="Task"/> <type name="LinkedObject"/> </relation>
+<node showlabel="no">
+   <set name="$assign" type="Task"/>
+   <set name="$changeDueDate" type="Task"/>
+   <set name="$complete" type="Task"/>
+   <set name="$createTask" type="Task"/>
+   <set name="$deleteTask" type="Task"/>
+   <set name="$editDescription" type="Task"/>
+   <set name="$editLabel" type="Task"/>
+   <set name="$reopen" type="Task"/>
+</node>
+
+<edge label="args">
+   <relation name="$vizTaskEventArgs"> <type name="TaskEvent"/> <type name="Task"/> </relation>
 </edge>
 
 <edge visible="yes" attribute="no">
-   <relation name="$taskEvents"> <type name="univ"/> <type name="univ"/> </relation>
    <relation name="assignee"> <type name="Task"/> <type name="Assignee"/> </relation>
+   <relation name="taskObject"> <type name="Task"/> <type name="TaskObject1"/> </relation>
+   <relation name="taskObject"> <type name="Task"/> <type name="TaskObject2"/> </relation>
+   <relation name="taskObject"> <type name="Task"/> <type name="TaskObject3"/> </relation>
 </edge>
 
 </view>

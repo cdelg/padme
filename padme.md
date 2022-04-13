@@ -10,13 +10,10 @@ A synchronization example of the Lead, Task, Evaluation and Comment concepts.
 module padme
 
 open fwk/fwk
-open task[User, univ]
+open task[User, Evaluation, Evaluation, Evaluation]
 open evaluation[User]
-open lead[Asset, Brief, univ]
-open comment[AssessmentBlock] as assessmentCmt
-open comment[assessmentCmt/Comment]  as assessmentCmtReply
-open comment[QuestionBlock] as questionCmt
-open comment[questionCmt/Comment]  as questionCmtReply
+open lead[Asset, Brief, Evaluation, Task, Task]
+open comment[Comment, QuestionBlock, AssessmentBlock]
 ```
 ## Synchronization
 
@@ -26,17 +23,15 @@ var sig User {}
 var sig Asset {}
 var sig Brief {}
 
-private let removedEvaluations[led] = {e: Evaluation | led.removeItems[e]}
-private let removedTasks[led] = {e: Task | led.removeItems[e]}
-private let addedEvaluations[led] = {e: Evaluation' | led.addItems[e]}
-private let addedTasks[led] = {e: Task' | led.addItems[e]}
 
 /**
 * Evaluation <--> Lead
 */
 
 pred removeFromLeadImpliesDeleteEval {
-	all led: Lead | all rem: led.removedEvaluations | rem.delete
+	all led: Lead | all eval: Evaluation {
+		(eval in led.findAllItems and after (eval not in led.findAllItems)) implies eval.delete
+	} 
 }
 
 /**
@@ -44,11 +39,11 @@ pred removeFromLeadImpliesDeleteEval {
 */
 
 pred finishEvalEquivCompleteTask {
-	// TODO
+	
 }
 
 pred unfinishEvalEquivReopenTask {
-	// TODO
+	
 }
 
 /**
@@ -56,7 +51,9 @@ pred unfinishEvalEquivReopenTask {
 */
 
 pred removeFromLeadImpliesDeleteTask {
-	all led: Lead | all rem: led.removedTasks | rem.delete
+	all led: Lead | all tsk: Task {
+		(tsk in led.findAllItems and after (tsk not in led.findAllItems)) implies tsk.delete
+	} 
 }
 
 /**
@@ -64,22 +61,29 @@ pred removeFromLeadImpliesDeleteTask {
 */
 
 pred addEvalToLeadEquivAddRelatedTaskToLead {
-	all led: Lead {
-		all evl: led.addedEvaluations {
-			one tsk: Task' | tsk.taskObject' = evl and led.addItems[tsk] and after (led.stageOf[evl] = led.stageOf[tsk])
+	all led: Lead | all evl: Evaluation' {
+		(evl not in led.findItems and after (evl in led.findItems)) implies after one tsk: Task {
+			tsk.taskObject = evl
+			led.addItems[tsk]
 		}
-		all tsk: led.addedTasks | let evl = tsk.taskObject' {
-			(some evl and evl in Evaluation') implies (led.addItems[evl] and after (led.stageOf[evl] = led.stageOf[tsk]))
+
+		(evl not in led.findStageItems and after (evl in led.findStageItems)) implies after one tsk: Task {
+			tsk.taskObject = evl
+			led.addStageItems[led.stageOf[evl], tsk]
 		}
+	}
+
+	all led: Lead | all tsk: Task' {
+		(some tsk.taskObject and (tsk not in led.findItems) and after (tsk in led.findItems)) implies after led.addItems[tsk.taskObject]
+
+		(some tsk.taskObject and (tsk not in led.findStageItems) and after (tsk in led.findStageItems)) implies after led.addStageItems[led.stageOf[tsk], tsk.taskObject]
 	}
 }
 
 pred removeEvalFromLeadImpliesRemoveRelatedTasksFromLead {
-	all led: Lead {
-		all evl: led.removedEvaluations {
-			all tsk: taskObject.evl | led.removeItems[tsk]
-		}
-	}
+	all led: Lead | all evl: Evaluation {
+		(evl in led.findAllItems and after (evl not in led.findAllItems)) implies all tsk: taskObject.evl | led.removeItems[tsk]
+	} 
 }
 
 fact{
@@ -91,28 +95,19 @@ fact{
 	}
 }
 ```
-## Invariants
-
-```alloy
-fact{
-	always {
-		Task.taskObject in Evaluation
-		Lead.findAllItems in (Task + Evaluation)
-	}
-}
-```
 
 ## Visualization
 
 ```alloy
-fun events: univ -> univ {
-	taskEvents 
-	+ evaluationEvents 
-	+ leadEvents 
-	+ assessmentCmt/commentEvents
-	+ assessmentCmtReply/commentEvents
-	+ questionCmt/commentEvents
-	+ questionCmtReply/commentEvents
+fun events: univ {
+	eventAgrs.univ
+}
+
+fun eventAgrs: univ -> univ {
+	vizTaskEventArgs 
+	+ vizEvaluationEventArgs 
+	+ vizLeadEventArgs 
+	+ vizCommentEventArgs
 }
 ```
 ## Simulation
@@ -123,6 +118,6 @@ run simulation {
 	no Task 
 	no Evaluation
 	no Lead
-	eventually some led: Lead, evl: Evaluation' | led.addItems[evl]
+	eventually some Evaluation<:Lead.findAllItems
 }
 ```

@@ -9,58 +9,23 @@ open fwk/boolean
 open fwk/text
 open fwk/date
 
-// Trick for first step
-pred isFirstStep {
-	not before isTrue[True] 
-}
-
-// Existance
-pred exist[u: univ] {
-	some u and u in univ
-}
-
-pred notExist[u: univ] {
-	u not in univ
-}
-
-pred existBefore[u: univ] {
-	before u.exist
-}
-
-pred notExistBefore[u: univ] {
-	(before u.notExist) or isFirstStep
-}
-
-pred existAfter[u: univ] {
-	after u.exist
-}
-
-pred notExistAfter[u: univ] {
-	after u.notExist
-}
-
 // Repository Actions
 pred create[u: univ] {
-	u.notExist and u.existAfter
-}
-
-pred created[u: univ] {
-	(before u.create) or (isFirstStep and u.exist)
+	some u
+	not (before u in univ)
+	u in univ
 }
 
 pred delete[u: univ] {
-	u.exist and u.notExistAfter
+	some u
+	u in univ
+	after u not in univ
 }
 
 pred canUpdate[u: univ] {
-	u.exist and u.existAfter
-}
-
-pred update[obj: univ, rel: univ -> univ] {
-	some obj
-	all o: obj {
-		o.update[rel, none] or some val: univ | o.update[rel, val]
-	}
+	some u
+	u in univ
+	after u in univ
 }
 
 pred update[obj: univ, rel: univ -> univ, val: univ] {
@@ -68,24 +33,10 @@ pred update[obj: univ, rel: univ -> univ, val: univ] {
 	all o: obj | o.rel != val and o.rel' = val
 }
 
-pred updateByAdding[obj: univ, rel: univ -> univ] {
-	some obj
-	all o: obj {
-		some val: univ | o.updateByAdding[rel, val]
-	}
-}
-
 pred updateByAdding[obj: univ, rel: univ -> univ, val: univ] {
 	some val
 	obj.canUpdate
 	all o: obj | val not in o.rel and val in o.rel'
-}
-
-pred updateByRemoving[obj: univ, rel: univ -> univ] {
-	some obj
-	all o: obj {
-		some val: univ | o.updateByRemoving[rel, val]
-	}
 }
 
 pred updateByRemoving[obj: some univ, rel: univ -> univ, val: univ] {
@@ -95,11 +46,11 @@ pred updateByRemoving[obj: some univ, rel: univ -> univ, val: univ] {
 }
 
 // Read Only
-pred readOnly[entity: univ, rel: univ -> univ] {
-	entity.canUpdate implies entity.rel = entity.rel'
+pred readOnly[obj: univ, rel: univ -> univ] {
+	all o: obj | o.canUpdate implies o.rel = o.rel'
 }
 
-pred readOnly[entity: univ, rel: univ -> univ -> univ] {
-	entity.canUpdate implies entity.rel = entity.rel'
+pred readOnly[obj: univ, rel: univ -> univ -> univ] {
+	all o: obj | o.canUpdate implies o.rel = o.rel'
 }
 ```

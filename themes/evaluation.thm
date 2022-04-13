@@ -8,27 +8,27 @@
 <defaultedge visible="no"/>
 
 <node>
-   <type name="AddedBlockEvaluation"/>
-   <type name="AddedSectionEvaluation"/>
+   <type name="AddBlockEvaluation"/>
+   <type name="AddSectionEvaluation"/>
    <type name="AssessmentType"/>
-   <type name="CanceledInviteEvaluation"/>
-   <type name="ChangedOwnerEvaluation"/>
-   <type name="CreatedEvaluation"/>
-   <type name="DeletedEvaluation"/>
-   <type name="EditedAssessmentEvaluation"/>
-   <type name="EditedAssessmentTitleEvaluation"/>
-   <type name="EditedGuidelinesEvaluation"/>
-   <type name="EditedNameEvaluation"/>
-   <type name="EditedQuestionEvaluation"/>
-   <type name="EditedSectionNameEvaluation"/>
+   <type name="CancelInviteEvaluation"/>
+   <type name="ChangeOwnerEvaluation"/>
+   <type name="CreateEvaluation"/>
+   <type name="DeleteEvaluation"/>
+   <type name="EditAssessmentEvaluation"/>
+   <type name="EditAssessmentTitleEvaluation"/>
+   <type name="EditGuidelinesEvaluation"/>
+   <type name="EditNameEvaluation"/>
+   <type name="EditQuestionEvaluation"/>
+   <type name="EditSectionNameEvaluation"/>
    <type name="EvaluationSectionType"/>
    <type name="Int"/>
-   <type name="InvitedEvaluation"/>
+   <type name="InviteEvaluation"/>
    <type name="ParticipatoryType"/>
-   <type name="RemovedBlockEvaluation"/>
-   <type name="RemovedSectionEvaluation"/>
-   <type name="ReorderedBlockEvaluation"/>
-   <type name="ReorderedSectionEvaluation"/>
+   <type name="RemoveBlockEvaluation"/>
+   <type name="RemoveSectionEvaluation"/>
+   <type name="ReorderBlockEvaluation"/>
+   <type name="ReorderSectionEvaluation"/>
    <type name="String"/>
    <type name="univ"/>
    <type name="open$4/Ord"/>
@@ -48,7 +48,6 @@
    <type name="fwk/boolean/ordering/Ord"/>
    <type name="fwk/date/ordering/Ord"/>
    <type name="fwk/text/ordering/Ord"/>
-   <set name="$evaluatePrinciple_e" type="Evaluation"/>
 </node>
 
 <node color="Gray">
@@ -62,13 +61,35 @@
    <type name="EvaluationSection"/>
 </node>
 
-<node shape="Ellipse" color="Black">
+<node hideunconnected="no" showlabel="no">
+   <set name="$vizEvaluationEvents" type="univ"/>
+</node>
+
+<node shape="Parallelogram" color="Black">
    <type name="EvaluationEvent"/>
 </node>
 
-<edge attribute="no">
-   <relation name="$updateByAdding_val"> <type name="univ"/> <type name="univ"/> </relation>
-</edge>
+<node showlabel="no">
+   <set name="$addAssessmentBlock" type="AssessmentBlock"/>
+   <set name="$addEvaluationSection" type="EvaluationSection"/>
+   <set name="$addQuestionBlock" type="QuestionBlock"/>
+   <set name="$cancelInvite" type="Evaluation"/>
+   <set name="$changeOwner" type="Evaluation"/>
+   <set name="$createEvaluation" type="Evaluation"/>
+   <set name="$deleteEvaluation" type="Evaluation"/>
+   <set name="$editAssessment" type="AssessmentBlock"/>
+   <set name="$editAssessmentTitle" type="AssessmentBlock"/>
+   <set name="$editGuidelines" type="EvaluationSection"/>
+   <set name="$editName" type="Evaluation"/>
+   <set name="$editQuestion" type="QuestionBlock"/>
+   <set name="$editSectionName" type="EvaluationSection"/>
+   <set name="$invite" type="Evaluation"/>
+   <set name="$removeAssessmentBlock" type="AssessmentBlock"/>
+   <set name="$removeEvaluationSection" type="EvaluationSection"/>
+   <set name="$removeQuestionBlock" type="QuestionBlock"/>
+   <set name="$reorderBlocks" type="EvaluationSection"/>
+   <set name="$reorderSections" type="Evaluation"/>
+</node>
 
 <edge attribute="yes">
    <relation name="guidelines"> <type name="EvaluationSection"/> <type name="fwk/text/Text"/> </relation>
@@ -77,6 +98,10 @@
    <relation name="question"> <type name="QuestionBlock"/> <type name="fwk/text/Text"/> </relation>
    <relation name="title"> <type name="AssessmentBlock"/> <type name="fwk/text/Text"/> </relation>
    <relation name="type"> <type name="EvaluationSection"/> <type name="EvaluationSectionType"/> </relation>
+</edge>
+
+<edge attribute="yes" label="args">
+   <relation name="$vizEvaluationEventArgs"> <type name="EvaluationEvent"/> <type name="univ"/> </relation>
 </edge>
 
 <edge visible="no" attribute="no">
@@ -98,10 +123,6 @@
 <edge visible="yes" attribute="no">
    <relation name="functionalOwner"> <type name="Evaluation"/> <type name="Participant"/> </relation>
    <relation name="invited"> <type name="Evaluation"/> <type name="Participant"/> </relation>
-</edge>
-
-<edge visible="yes" attribute="no" constraint="no">
-   <relation name="$evaluationEvents"> <type name="univ"/> <type name="univ"/> </relation>
 </edge>
 
 </view>

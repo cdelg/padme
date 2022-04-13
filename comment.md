@@ -7,7 +7,7 @@
 A comment allows to share some thouths about something.
 
 ```alloy
-module comment[Target]
+module comment[Commentable1, Commentable2, Commentable3]
 
 open fwk/fwk
 ```
@@ -15,8 +15,10 @@ open fwk/fwk
 ## State
 
 ```alloy
+private let Commentable = Comment + Commentable1 + Commentable2 + Commentable3
+
 var sig Comment {
-	var target: one Target,
+	var target: one Commentable,
 	var content: one Text,
 	var modified: one Boolean
 }
@@ -25,12 +27,23 @@ var sig Comment {
 ## Actions
 
 ```alloy
-pred Comment.editContent {
-	this.update[Comment<:content]
+pred Comment.createComment[cnt: Text, tgt: Commentable] {
+	this.create
+
+	this.target = tgt
+	this.content = cnt
+}
+
+fun createComment: Comment {
+	{c: Comment | c.create}
 }
 
 pred Comment.editContent[cnt: Text] {
 	this.update[Comment<:content, cnt]
+}
+
+fun editContent: set Comment {
+	{c: Comment, txt: Text | c.editContent[txt]}.Text
 }
 ```
 
@@ -38,7 +51,7 @@ pred Comment.editContent[cnt: Text] {
 
 ```alloy
 pred cannotChangeCommentTarget {
-	Comment.readOnly[Comment<:target] 
+	Comment.readOnly[Comment<:target]
 }
 
 pred modifiedFlagCanOnlyChangeToTrue {
@@ -47,9 +60,17 @@ pred modifiedFlagCanOnlyChangeToTrue {
 	} 
 }
 
+pred cannotCommentItself {
+	no cmt: Comment | cmt.target = cmt
+}
+
+pred oneLevelReply {
+	no cmt: Comment | some cmt.target.target and cmt.target.target in Comment
+}
+
 pred syncModifiedFlagAndEdit {
 	all cmt: Comment {
-		cmt.modified != cmt.modified' <=> cmt.editContent
+		cmt.modified != cmt.modified' <=> cmt in editContent
 	}
 }
 
@@ -68,6 +89,8 @@ pred neverDelete {
 fact{
 	always {
 		cannotChangeCommentTarget
+		cannotCommentItself
+		oneLevelReply
 		modifiedFlagCanOnlyChangeToTrue
 		syncModifiedFlagAndEdit
 		modifiedFlagFalseByDefault
@@ -78,16 +101,19 @@ fact{
 
 ## Visualization
 
-
 ```alloy
 enum CommentEvent{
-	CreatedComment,
-	EditedContentComment
+	CreateComment,
+	EditContentComment
 }
 
-fun commentEvents: univ -> univ {
-	CreatedComment -> {e: Comment| e.created}
-	+ EditedContentComment -> {e:  Comment | before e.editContent}
+fun vizCommentEvents: set CommentEvent {
+	vizCommentEventArgs.Comment
+}
+
+fun vizCommentEventArgs: CommentEvent -> Comment {
+	CreateComment -> createComment +
+	EditContentComment -> editContent
 }
 ```
 
@@ -107,14 +133,11 @@ assert goodStateOfEdited {
 }
 
 pred commentPrinciple {
-	eventually some Comment
+	eventually some createComment
 }
 
 pred commentAndEditPrinciple {
-	eventually {
-		some Comment 
-		eventually some EditedContentComment.commentEvents
-	}
+	eventually some editContent
 }
 
 check goodStateOfNotEdited 

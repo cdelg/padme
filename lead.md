@@ -7,7 +7,7 @@
 A lead allows you to review an asset against a goal by following a workflow.
 
 ```alloy
-module lead[Asset, Goal, ReviewItem]
+module lead[Asset, Goal, ReviewItem1, ReviewItem2, ReviewItem3]
 
 open fwk/fwk
 open fwk/ordered_value[LeadStage1, LeadStage2, LeadStage3]
@@ -16,6 +16,8 @@ open fwk/ordered_value[LeadStage1, LeadStage2, LeadStage3]
 ## State
 
 ```alloy
+private let ReviewItem = ReviewItem1 + ReviewItem2 + ReviewItem3
+
 enum LeadStatus {ActiveLeadStatus, AcceptedLeadStatus, DeclinedLeadStatus}
 enum LeadStage {LeadStage1, LeadStage2, LeadStage3}
 
@@ -33,82 +35,108 @@ var sig Lead {
 ## Actions
 
 ```alloy
+fun createLead: set Lead {
+	{l: Lead | l.create}
+}
+
+fun deleteLead: set Lead {
+	{l: Lead | l.delete}
+}
+
 pred Lead.accept {
 	this.update[Lead<:status, AcceptedLeadStatus]
+}
+
+fun accept: set Lead {
+	{l: Lead | l.accept}
 }
 
 pred Lead.decline {
 	this.update[Lead<:status, DeclinedLeadStatus]
 }
 
+fun decline: set Lead {
+	{l: Lead | l.decline}
+}
+
 pred Lead.reopen {
 	this.update[Lead<:status, ActiveLeadStatus]
 }
 
+fun reopen: set Lead {
+	{l: Lead | l.reopen}
+}
+
 pred Lead.nextStage {
-	this.update[Lead<:stage] and this.stage'.isAfter[this.stage]
+	this.update[Lead<:stage, justAfterOf[this.stage]]
+}
+
+fun nextStage: set Lead {
+	{l: Lead | l.nextStage}
 }
 
 pred Lead.previousStage {
-	this.update[Lead<:stage] and this.stage'.isBefore[this.stage]
+	this.update[Lead<:stage, justBeforeOf[this.stage]]
 }
 
-pred Lead.addItems {
-	this.updateByAdding[Lead<:leadItems] or this.addStageItems
+fun previousStage: set Lead {
+	{l: Lead | l.previousStage}
 }
 
 pred Lead.addItems[val: ReviewItem] {
-	this.updateByAdding[Lead<:leadItems, val] or this.addStageItems[val]
+	this.updateByAdding[Lead<:leadItems, val]
 }
 
-pred Lead.addItems[stg: LeadStage, val: ReviewItem] {
-	stg = none implies this.updateByAdding[Lead<:leadItems, val] else this.addStageItems[stg, val]
+fun addItems: set Lead {
+	{l: Lead,  val: ReviewItem| l.addItems[val]}.ReviewItem
 }
 
-private pred Lead.addStageItems {
-	some stg: LeadStage, val: ReviewItem | this.addStageItems[stg, val]	
-}
-
-private pred Lead.addStageItems[val: ReviewItem] {
-	some stg: LeadStage | this.addStageItems[stg, val]
-}
-
-private pred Lead.addStageItems[stg: LeadStage, val: ReviewItem] {
-	some val
-	some LeadStage
+pred Lead.addStageItems[stg: LeadStage, val: ReviewItem] {
 	this.canUpdate
+	some stg
+	some val
+
 	all o: this | val not in o.stageItems[stg] and val in o.stageItems'[stg]	
 }
 
-pred Lead.removeItems {
-	this.updateByRemoving[Lead<:leadItems] or some stg: LeadStage, val: ReviewItem | this.removeStageItems[stg, val]
+fun addStageItems: set Lead {
+	{l: Lead, stg: LeadStage, val: ReviewItem| l.addStageItems[stg, val]}.ReviewItem.LeadStage
 }
 
 pred Lead.removeItems[val: ReviewItem] {
-	this.updateByRemoving[Lead<:leadItems, val] or some stg: LeadStage | this.removeStageItems[stg, val]
+	this.updateByRemoving[Lead<:leadItems, val]
 }
 
-private pred Lead.removeStageItems[stg: LeadStage, val: ReviewItem] {
-	some val
-	some LeadStage
+fun removeItems: set Lead {
+	{l: Lead,  val: ReviewItem| l.removeItems[val]}.ReviewItem
+}
+
+pred Lead.removeStageItems[stg: LeadStage, val: ReviewItem] {
 	this.canUpdate
+	some val
+	some stg
+	
 	all o: this | val in o.stageItems[stg] and val not in o.stageItems'[stg]
 }
 
-pred Lead.addBlockingMark {
-	this.updateByAdding[Lead<:blockers]
+fun removeStageItems: set Lead {
+	{l: Lead, stg: LeadStage, val: ReviewItem| l.removeStageItems[stg, val]}.ReviewItem.LeadStage
 }
 
 pred Lead.addBlockingMark[val: ReviewItem] {
 	this.updateByAdding[Lead<:blockers, val]
 }
 
-pred Lead.removeBlockingMark {
-	this.updateByRemoving[Lead<:blockers]
+fun addBlockingMark: set Lead {
+	{l: Lead,  val: ReviewItem| l.addBlockingMark[val]}.ReviewItem
 }
 
 pred Lead.removeBlockingMark[val: ReviewItem] {
 	this.updateByRemoving[Lead<:blockers, val]
+}
+
+fun removeBlockingMark: set Lead {
+	{l: Lead,  val: ReviewItem| l.removeBlockingMark[val]}.ReviewItem
 }
 
 fun Lead.findItems: set ReviewItem {
@@ -152,7 +180,7 @@ fun Lead.stageOf[itm: ReviewItem]: lone LeadStage {
 
 ```alloy
 pred leadCreateState {
-	all led: {e: Lead | e.created} {
+	all led: createLead {
 		led.status = ActiveLeadStatus
 		led.stage = LeadStage1
 		led.leadItems = none
@@ -250,31 +278,35 @@ fact{
 
 ```alloy
 enum LeadEvent{
-	CreatedLead, 
-	DeletedLead, 
-	AcceptedLead, 
-	DeclinedLead, 
-	ReopenedLead,
-	NextStage, 
-	PreviousStage,
-	AddedItems, 
-	RemovedItems,
-	AddedBlockingMark,
-	RemovedBlockingMark
+	CreateLead, 
+	DeleteLead, 
+	AcceptLead, 
+	DeclineLead, 
+	ReopenLead,
+	NextStageLead, 
+	PreviousStageLead,
+	AddItemsLead, 
+	RemoveItemsLead,
+	AddBlockingMarkLead,
+	RemoveBlockingMarkLead
 }
 
-fun leadEvents: univ -> univ {
-	CreatedLead -> {t: Lead | t.created}
-	+ DeletedLead -> {t: Lead |  t.delete}
-	+ AcceptedLead -> {t: Lead | before t.accept}
-	+ DeclinedLead -> {t: Lead | before t.decline}
-	+ ReopenedLead -> {t: Lead | before t.reopen}
-	+ NextStage -> {t: Lead | before t.nextStage}
-	+ PreviousStage -> {t: Lead | before t.previousStage}
-	+ AddedItems -> {t: Lead | before t.addItems}
-	+ RemovedItems -> {t: Lead | before t.removeItems}
-	+ AddedBlockingMark -> {t: Lead | before t.addBlockingMark}
-	+ RemovedBlockingMark -> {t: Lead | before t.removeBlockingMark}
+fun vizLeadEvents: set LeadEvent {
+	vizLeadEventArgs.Lead
+}
+
+fun vizLeadEventArgs: LeadEvent -> Lead {
+	CreateLead -> createLead
+	+ DeleteLead -> deleteLead
+	+ AcceptLead -> accept
+	+ DeclineLead -> decline
+	+ ReopenLead -> reopen
+	+ NextStageLead -> nextStage
+	+ PreviousStageLead -> previousStage
+	+ AddItemsLead -> (addItems + addStageItems)
+	+ RemoveItemsLead -> (removeItems + removeStageItems)
+	+ AddBlockingMarkLead -> addBlockingMark
+	+ RemoveBlockingMarkLead -> removeBlockingMark
 }
 ```
 
@@ -282,13 +314,13 @@ fun leadEvents: univ -> univ {
 
 ```alloy
 pred acceptLeadPrinciple {
-	always #leadEvents <= 1
-	eventually some led: Lead | (led.accept and once led.addBlockingMark)
+	always #vizLeadEvents <= 1
+	eventually (some accept and once some addBlockingMark)
 } 
 
 pred declineLeadPrinciple {
-	always #leadEvents <= 1
-	eventually some led: Lead | led.decline and once led.addBlockingMark
+	always #vizLeadEvents <= 1
+	eventually (some decline and once some addBlockingMark)
 }
 
 run acceptLeadPrinciple

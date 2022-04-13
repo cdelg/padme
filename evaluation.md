@@ -53,86 +53,126 @@ var sig QuestionBlock {
 ```alloy
 
 // Evaluation
-pred Evaluation.editName {
-	this.update[Evaluation<:name]
+fun createEvaluation: set Evaluation {
+	{e: Evaluation | e.create}
+}
+
+fun deleteEvaluation: set Evaluation {
+	{e: Evaluation | e.delete}
 }
 
 pred Evaluation.editName[nam: Text] {
 	this.update[Evaluation<:name, nam]
 }
 
-pred Evaluation.changeOwner {
-	this.update[Evaluation<:functionalOwner]
+fun editName: set Evaluation {
+	{e: Evaluation, txt: Text | e.editName[txt]}.Text + {e: Evaluation | e.editName[none]}
 }
 
 pred Evaluation.changeOwner[owr: Participant] {
 	this.update[Evaluation<:functionalOwner, owr]
 }
 
-pred Evaluation.invite {
-	this.updateByAdding[Evaluation<:invited]
+fun changeOwner: set Evaluation {
+	{e: Evaluation, owr: Participant | e.changeOwner[owr]}.Participant
 }
 
 pred Evaluation.invite[inv: Participant] {
 	this.updateByAdding[Evaluation<:invited, inv]
 }
 
-pred Evaluation.cancelInvite {
-	this.updateByRemoving[Evaluation<:invited]
+fun invite: set Evaluation {
+	{e: Evaluation, inv: Participant | e.invite[inv]}.Participant
 }
 
 pred Evaluation.cancelInvite[inv: Participant] {
 	this.updateByRemoving[Evaluation<:invited, inv]
 }
 
+fun cancelInvite: set Evaluation {
+	{e: Evaluation, inv: Participant | e.cancelInvite[inv]}.Participant
+}
+
 pred Evaluation.reorderSections {
-	this.update[Evaluation<:sectionsOrder]
+	some i: Int | this.update[Evaluation<:sectionsOrder, i]
+}
+
+fun reorderSections: set Evaluation {
+	{e: Evaluation | e.reorderSections}
 }
 
 // EvaluationSection
-pred EvaluationSection.editName {
-	this.update[EvaluationSection<:name]
+fun addEvaluationSection: set EvaluationSection {
+	{e: EvaluationSection | e.create}
 }
 
-pred EvaluationSection.editName[nam: Text] {
+fun removeEvaluationSection: set EvaluationSection {
+	{e: EvaluationSection | e.delete}
+}
+
+pred EvaluationSection.editSectionName[nam: Text] {
 	this.update[EvaluationSection<:name, nam]
 }
 
-pred EvaluationSection.editGuidelines {
-	this.update[EvaluationSection<:guidelines]
+fun editSectionName: set EvaluationSection {
+	{e: EvaluationSection, txt: Text | e.editSectionName[txt]}.Text + {e: EvaluationSection | e.editSectionName[none]}
 }
 
 pred EvaluationSection.editGuidelines[gud: Text] {
 	this.update[EvaluationSection<:guidelines, gud]
 }
 
+fun editGuidelines: set EvaluationSection {
+	{e: EvaluationSection, txt: Text | e.editGuidelines[txt]}.Text + {e: EvaluationSection | e.editGuidelines[none]}
+}
+
 pred EvaluationSection.reorderBlocks {
-	this.update[EvaluationSection<:blocksOrder]
+	some i: Int | this.update[EvaluationSection<:blocksOrder, i]
+}
+
+fun reorderBlocks: set EvaluationSection {
+	{e: EvaluationSection | e.reorderBlocks}
 }
 
 // Block
-pred AssessmentBlock.editAssessmentTitle {
-	this.update[AssessmentBlock<:title]
+fun addAssessmentBlock: set AssessmentBlock {
+	{e: AssessmentBlock | e.create}
+}
+
+fun removeAssessmentBlock: set AssessmentBlock {
+	{e: AssessmentBlock | e.delete}
 }
 
 pred AssessmentBlock.editAssessmentTitle[ttl: Text] {
 	this.update[AssessmentBlock<:title, ttl]
 }
 
-pred AssessmentBlock.editAssessment {
-	this.update[AssessmentBlock<:assessment]
+fun editAssessmentTitle: set AssessmentBlock {
+	{e: AssessmentBlock, txt: Text | e.editAssessmentTitle[txt]}.Text + {e: AssessmentBlock | e.editAssessmentTitle[none]}
 }
 
 pred AssessmentBlock.editAssessment[ast: Text] {
 	this.update[AssessmentBlock<:assessment, ast]
 }
 
-pred QuestionBlock.editQuestion {
-	this.update[QuestionBlock<:question]
+fun editAssessment: set AssessmentBlock {
+	{e: AssessmentBlock, txt: Text | e.editAssessment[txt]}.Text + {e: AssessmentBlock | e.editAssessment[none]}
+}
+
+fun addQuestionBlock: set QuestionBlock {
+	{e: QuestionBlock | e.create}
+}
+
+fun removeQuestionBlock: set QuestionBlock {
+	{e: QuestionBlock | e.delete}
 }
 
 pred QuestionBlock.editQuestion[qst: Text] {
 	this.update[QuestionBlock<:question, qst]
+}
+
+fun editQuestion: set QuestionBlock {
+	{e: QuestionBlock, txt: Text | e.editQuestion[txt]}.Text + {e: QuestionBlock | e.editQuestion[none]}
 }
 ```
 
@@ -186,43 +226,47 @@ fact{
 
 ```alloy
 enum EvaluationEvent{
-	CreatedEvaluation, 
-	DeletedEvaluation, 
-	EditedNameEvaluation, 
-	ChangedOwnerEvaluation, 
-	InvitedEvaluation, 
-	CanceledInviteEvaluation, 
-	AddedSectionEvaluation, 
-	RemovedSectionEvaluation, 
-	ReorderedSectionEvaluation, 
-	EditedSectionNameEvaluation, 
-	EditedGuidelinesEvaluation, 
-	AddedBlockEvaluation, 
-	RemovedBlockEvaluation, 
- 	ReorderedBlockEvaluation, 
-	EditedAssessmentTitleEvaluation, 
-	EditedAssessmentEvaluation, 
-	EditedQuestionEvaluation
+	CreateEvaluation, 
+	DeleteEvaluation, 
+	EditNameEvaluation, 
+	ChangeOwnerEvaluation, 
+	InviteEvaluation, 
+	CancelInviteEvaluation, 
+	AddSectionEvaluation, 
+	RemoveSectionEvaluation, 
+	ReorderSectionEvaluation, 
+	EditSectionNameEvaluation, 
+	EditGuidelinesEvaluation, 
+	AddBlockEvaluation, 
+	RemoveBlockEvaluation, 
+ 	ReorderBlockEvaluation, 
+	EditAssessmentTitleEvaluation, 
+	EditAssessmentEvaluation, 
+	EditQuestionEvaluation
 }
 
-fun evaluationEvents: univ -> univ {
-	CreatedEvaluation -> {e: Evaluation | e.created}
-	+ DeletedEvaluation -> {e: Evaluation | e.delete}
-	+ EditedNameEvaluation -> {e: Evaluation | before e.editName}
-	+ ChangedOwnerEvaluation -> {e: Evaluation | before e.changeOwner}
-	+ InvitedEvaluation -> {e: Evaluation | before e.invite}
-	+ CanceledInviteEvaluation -> {e: Evaluation | before e.cancelInvite}
-	+ AddedSectionEvaluation -> {e: EvaluationSection |  e.created}
-	+ RemovedSectionEvaluation -> {e: EvaluationSection | e.delete}
-	+ ReorderedSectionEvaluation -> {e: Evaluation | before e.reorderSections}
-	+ EditedSectionNameEvaluation -> {e: EvaluationSection | before e.editName}
-	+ EditedGuidelinesEvaluation -> {e: EvaluationSection | before e.editGuidelines}
-	+ AddedBlockEvaluation -> {e: Block | e.created}
-	+ RemovedBlockEvaluation -> {e: Block | e.delete}
-	+ ReorderedBlockEvaluation -> {e: EvaluationSection | before e.reorderBlocks}
-	+ EditedAssessmentTitleEvaluation -> {e: AssessmentBlock | before e.editAssessmentTitle}
-	+ EditedAssessmentEvaluation -> {e: AssessmentBlock | before e.editAssessment}
-	+ EditedQuestionEvaluation -> {e: QuestionBlock | before e.editQuestion}
+fun vizEvaluationEvents: set univ {
+	vizEvaluationEventArgs.univ
+}
+
+fun vizEvaluationEventArgs: EvaluationEvent -> univ {
+	CreateEvaluation -> {e: Evaluation | e.create}
+	+ DeleteEvaluation -> {e: Evaluation | e.delete}
+	+ EditNameEvaluation -> editName
+	+ ChangeOwnerEvaluation -> changeOwner
+	+ InviteEvaluation -> invite
+	+ CancelInviteEvaluation -> cancelInvite
+	+ AddSectionEvaluation -> addEvaluationSection
+	+ RemoveSectionEvaluation -> removeEvaluationSection
+	+ ReorderSectionEvaluation -> reorderSections
+	+ EditSectionNameEvaluation -> editName
+	+ EditGuidelinesEvaluation -> editGuidelines
+	+ AddBlockEvaluation -> (addAssessmentBlock + addQuestionBlock)
+	+ RemoveBlockEvaluation -> (removeAssessmentBlock + removeQuestionBlock)
+	+ ReorderBlockEvaluation -> reorderBlocks
+	+ EditAssessmentTitleEvaluation -> editAssessmentTitle
+	+ EditAssessmentEvaluation -> editAssessment
+	+ EditQuestionEvaluation -> editQuestion
 }
 ```
 
@@ -230,10 +274,8 @@ fun evaluationEvents: univ -> univ {
 
 ```alloy
 pred evaluatePrinciple {
-	always #evaluationEvents <= 2
-	eventually some e: Evaluation {
-		eventually some e.sections.blocks ; e.invite
-	}
+	always #vizEvaluationEvents <= 2
+	eventually (some addAssessmentBlock and some invite)
 }
 
 run evaluatePrinciple

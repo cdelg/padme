@@ -8,28 +8,26 @@
 <defaultedge visible="no"/>
 
 <node>
-   <type name="AcceptedLead"/>
    <type name="AcceptedLeadStatus"/>
+   <type name="AcceptLead"/>
    <type name="ActiveLeadStatus"/>
-   <type name="AddedBlockingMark"/>
-   <type name="AddedLeadItems"/>
-   <type name="AddedStageItems"/>
-   <type name="CreatedLead"/>
-   <type name="DeclinedLead"/>
+   <type name="AddBlockingMarkLead"/>
+   <type name="AddItemsLead"/>
+   <type name="CreateLead"/>
    <type name="DeclinedLeadStatus"/>
-   <type name="DeletedLead"/>
+   <type name="DeclineLead"/>
+   <type name="DeleteLead"/>
    <type name="Int"/>
    <type name="LeadStage"/>
    <type name="LeadStage1"/>
    <type name="LeadStage2"/>
    <type name="LeadStage3"/>
    <type name="LeadStatus"/>
-   <type name="NextStage"/>
-   <type name="PreviousStage"/>
-   <type name="RemovedBlockingMark"/>
-   <type name="RemovedLeadItems"/>
-   <type name="RemovedStageItems"/>
-   <type name="ReopenedLead"/>
+   <type name="NextStageLead"/>
+   <type name="PreviousStageLead"/>
+   <type name="RemoveBlockingMarkLead"/>
+   <type name="RemoveItemsLead"/>
+   <type name="ReopenLead"/>
    <type name="String"/>
    <type name="open$5/Ord"/>
    <type name="open$6/Ord"/>
@@ -49,39 +47,69 @@
    <type name="fwk/boolean/ordering/Ord"/>
    <type name="fwk/date/ordering/Ord"/>
    <type name="fwk/text/ordering/Ord"/>
-   <set name="$acceptLeadPrinciple_led" type="Lead"/>
 </node>
 
 <node color="Gray">
    <type name="Asset"/>
    <type name="Goal"/>
-   <type name="ReviewItem"/>
+   <type name="ReviewItem1"/>
+   <type name="ReviewItem2"/>
+   <type name="ReviewItem3"/>
 </node>
 
 <node color="Green">
    <type name="Lead"/>
 </node>
 
+<node hideunconnected="no" showlabel="no">
+   <set name="$vizLeadEvents" type="LeadEvent"/>
+</node>
+
 <node hideunconnected="yes">
    <type name="univ"/>
 </node>
 
-<node shape="Ellipse" color="Black">
+<node shape="Parallelogram" color="Black">
    <type name="LeadEvent"/>
 </node>
 
+<node showlabel="no">
+   <set name="$accept" type="Lead"/>
+   <set name="$addBlockingMark" type="Lead"/>
+   <set name="$addItems" type="Lead"/>
+   <set name="$addStageItems" type="Lead"/>
+   <set name="$createLead" type="Lead"/>
+   <set name="$decline" type="Lead"/>
+   <set name="$deleteLead" type="Lead"/>
+   <set name="$nextStage" type="Lead"/>
+   <set name="$previousStage" type="Lead"/>
+   <set name="$removeBlockingMark" type="Lead"/>
+   <set name="$removeItems" type="Lead"/>
+   <set name="$removeStageItems" type="Lead"/>
+   <set name="$reopen" type="Lead"/>
+</node>
+
 <edge attribute="yes">
+   <relation name="blockers"> <type name="Lead"/> <type name="ReviewItem1"/> </relation>
+   <relation name="blockers"> <type name="Lead"/> <type name="ReviewItem2"/> </relation>
+   <relation name="blockers"> <type name="Lead"/> <type name="ReviewItem3"/> </relation>
    <relation name="stage"> <type name="Lead"/> <type name="LeadStage"/> </relation>
    <relation name="status"> <type name="Lead"/> <type name="LeadStatus"/> </relation>
 </edge>
 
+<edge attribute="yes" label="args">
+   <relation name="$vizLeadEventArgs"> <type name="LeadEvent"/> <type name="Lead"/> </relation>
+</edge>
+
 <edge visible="yes">
-   <relation name="$leadEvents"> <type name="univ"/> <type name="univ"/> </relation>
    <relation name="asset"> <type name="Lead"/> <type name="Asset"/> </relation>
-   <relation name="blockers"> <type name="Lead"/> <type name="ReviewItem"/> </relation>
    <relation name="goal"> <type name="Lead"/> <type name="Goal"/> </relation>
-   <relation name="leadItems"> <type name="Lead"/> <type name="ReviewItem"/> </relation>
-   <relation name="stageItems"> <type name="Lead"/> <type name="LeadStage"/> <type name="ReviewItem"/> </relation>
+   <relation name="leadItems"> <type name="Lead"/> <type name="ReviewItem1"/> </relation>
+   <relation name="leadItems"> <type name="Lead"/> <type name="ReviewItem2"/> </relation>
+   <relation name="leadItems"> <type name="Lead"/> <type name="ReviewItem3"/> </relation>
+   <relation name="stageItems"> <type name="Lead"/> <type name="LeadStage"/> <type name="ReviewItem1"/> </relation>
+   <relation name="stageItems"> <type name="Lead"/> <type name="LeadStage"/> <type name="ReviewItem2"/> </relation>
+   <relation name="stageItems"> <type name="Lead"/> <type name="LeadStage"/> <type name="ReviewItem3"/> </relation>
 </edge>
 
 </view>
